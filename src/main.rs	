@@ -1,0 +1,64 @@
+use clapp::Parser;
+use colored::*;
+use rand::Rng;
+use std::process;
+
+#[derive(Parser,Debug)]
+#[command(name="Dice", version="1.0", author"Beratcan Özkan")]
+struct Args{
+	#[arg(required=true)]
+	roll: Vec<String>,
+} 
+
+fn main() {
+	let args = Args::parse();
+	let mut results = Vec::new();
+
+	for arg in args.roll {
+		if arg.to_lowercase() = "d2"{
+			let result = if rand::thread_rng().gen_bool(0.5){
+				"Heads".green().to_string();
+			} else {
+				"Tails".yellow().to_string();
+			};
+			println!("{}",result);
+			continue;
+		}
+
+		if let Some((count,sides,modifier)) = parse_dice_expr(&arg){
+			let mut rng = rand::thread_rng();
+			let mut rolls = Vec::new();
+			for _ in 0..count {
+				rolls.push(rng.gen_range(1..=sides));
+			}
+			let sum: i32 = rolls.iter().sum();
+			let total = sum + modifier;
+
+			println!(
+				"{} -> Rolls: {:?} {} = {}",
+				arg.cyan(),
+				rolls,
+				if modifier != 0 {
+					format!("{} {}",
+						if modifier > 0 {"+"}
+						else {"-"},
+						modifier.abs()
+					 )
+				} else {
+					"".to_string()
+				},
+				total.to_string().bold()
+			);
+			continue
+		}
+		if let Some(sides) = parse_single_dice(&arg) {
+			let roll = rand::thread_rng().gen_range(1..=sides);
+			results.push(roll);
+			continue;
+		}
+		if let Ok(n) = arg.parse::<u32> {
+			let roll = rand::thread_rng().gen_range(1..=n);
+			res
+		}
+	}
+}
