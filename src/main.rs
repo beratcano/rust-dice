@@ -17,7 +17,7 @@ fn main() {
   for arg in args.roll 
   {
     // Yazı Tura
-    if arg.to_lowercase() == "yazıtura" || arg.to_lowercase() == "yt" {
+    if arg.to_lowercase() == "yazıtura" || arg.to_lowercase() == "yt" || arg.to_lowercase() == "yazıtaur" {
       let result = if random_bool(0.5) {
         "Yazı 🪙".green().to_string()
       } else {
